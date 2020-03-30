@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Stock Management System</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+    $(function() {
+                $("[id*=button").click(function() {
+                    var array1 = [];
+                    $("[id*=tblfirstTable] .DataRow").each(function() {
+                        var amount = $(this).find('td').eq(2).text().trim();
+                        if (!isNaN(amount) && parseFloat(amount) > 0) {
+                            var firstTableData = {};
+                            firstTableData.Id = $(this).find('td').eq(0).text().trim();
+                            firstTableData.Name = $(this).find('td').eq(0).text().trim();
+                            firstTableData.Amount = amount
+                            array1.push(firstTableData);
+                        }
+                    });
+                    alert(JSON.stringify(array1));
+                });
+    </script>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/dashboard.css?v=1.2.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet" />
+</head>
+
+<body class="">
+    <div class="wrapper ">
+        <div class="sidebar" data-color="orange">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+            <div class="logo">
+                <a href="#" class="simple-text logo-normal">
+        Stock Management System
+        </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li>
+                        <a href="./dashboard.html">
+              <i class="icons design_app"></i>
+              <p>Dashboard</p>
+            </a>
+                    </li>
+                    <li>
+                        <a href="./user.html">
+              <i class="icons users_single-02"></i>
+              <p>User Profile</p>
+            </a>
+                    </li>
+                    <li>
+                        <a href="./tables.html">
+              <i class="icons design_bullet-list-67"></i>
+              <p>Table List</p>
+            </a>
+                    </li>
+                    <li class="active ">
+                        <a href="./capital_purchase.html">
+              <p>Capital Purchase</p>
+            </a>
+                    </li>
+                    <li>
+                        <a href="./invoice.html">
+              <p>Invoice</p>
+            </a>
+                    </li>
+                    <li>
+                        <a href="./customer.html">
+              <p>Customer</p>
+            </a>
+                    </li>
+                    <li>
+                        <a href="./products.html">
+              <p>Products</p>
+            </a>
+                    </li>
+                    <li>
+                        <a href="./capital_tracing.html">
+              <i class="icons design_bullet-list-67"></i>
+              <p>Table List</p>
+            </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg fixed-top navbar-transparent  bg-primary  navbar-absolute">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <div class="navbar-toggle">
+                            <button type="button" class="navbar-toggler">
+                                <span class="navbar-toggler-bar bar1"></span>
+                                <span class="navbar-toggler-bar bar2"></span>
+                                <span class="navbar-toggler-bar bar3"></span>
+                            </button>
+                        </div>
+                        <a class="navbar-brand" href="#pablo">Capital Purchase</a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <form>
+                            <div class="input-group no-border">
+                                <input type="text" value="" class="form-control" placeholder="Search...">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="icons ui-1_zoom-bold"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pablo">
+                  <i class="icons media-2_sound-wave"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Stats</span>
+                  </p>
+                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="icons location_world"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Some Actions</span>
+                  </p>
+                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pablo">
+                  <i class="icons users_single-02"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Account</span>
+                  </p>
+                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <div class="panel-header panel-header-sm">
+            </div>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <!DOCTYPE html>
+                                            <html>
+
+                                            <head>
+                                                <meta name="viewport" content="width=device-width, initial-scale=1">
+                                                <style>
+                                                    * {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 18px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+                                            </head>
+
+                                            <body>
+                                                <h2>Capital Items Tracing</h2>
+                                                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for Capital ID..">
+                                                <script>
+                                                    var today_date = new Date();
+    document.getElementById("tym").innerHTML = d;
+    
+    </script>
+
+                                                <table id="myTable">
+                                                    <tr class="header">
+                                                        <th style="width:20%;">Capital ID</th>
+                                                        <th style="width:30%;">Capital Name</th>
+                                                        <th style="width:20%;">Price </th>
+                                                        <th style="width:20%;">Quantity </th>
+                                                        <th style="width:40%;">Rate of depreciation</th>
+                                                        <th style="width:20%;">Purchase Date </th>
+                                                        <th style="width:30%;">Current Value</th>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Freezer</td>
+                                                        <td>20000</td>
+                                                        <td>2</td>
+                                                        <td>8%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                        
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>Centrifuge</td>
+                                                        <td>16000</td>
+                                                        <td>1</td>
+                                                        <td>5%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>Cow</td>
+                                                        <td>15000</td>
+                                                        <td>4</td>
+                                                        <td>10%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>4</td>
+                                                        <td>Boiler</td>
+                                                        <td>4000</td>
+                                                        <td>1</td>
+                                                        <td>7%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>5</td>
+                                                        <td>Milk Machine</td>
+                                                        <td>4500</td>
+                                                        <td>3</td>
+                                                        <td>6.5%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>6</td>
+                                                        <td>Printer</td>
+                                                        <td>1700</td>
+                                                        <td>1</td>
+                                                        <td>20%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>7</td>
+                                                        <td>CCTV</td>
+                                                        <td>3300</td>
+                                                        <td>3</td>
+                                                        <td>15%</td>
+                                                        <td><input type="date" value="2018-01-15"></td>
+                                                    </tr>
+                                                </table>
+                                                <script>
+                                                function myFunction() {
+                                                    var input, filter, table, tr, td, i;
+                                                    input = document.getElementById("myInput");
+                                                    filter = input.value.toUpperCase();
+                                                    table = document.getElementById("myTable");
+                                                    tr = table.getElementsByTagName("tr");
+                                                    for (i = 0; i < tr.length; i++) {
+                                                        td = tr[i].getElementsByTagName("td")[0];
+                                                        if (td) {
+                                                            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                                                                tr[i].style.display = "";
+                                                            } else {
+                                                                tr[i].style.display = "none";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                </script>
+                                            </body>
+
+                                            </html>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button>Submit</button>
+                    <footer class="footer">
+                        <div id="left">
+                            <textarea id="results"></textarea>
+                        </div>
+                </div>
+                </footer>
+            </div>
+        </div>
+        <!--   Core JS Files   -->
+        <script src="../assets/js/core/jquery.min.js"></script>
+        <script src="../assets/js/core/popper.min.js"></script>
+        <script src="../assets/js/core/bootstrap.min.js"></script>
+        <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+        <!-- Chart JS -->
+        <script src="../assets/js/plugins/chartjs.min.js"></script>
+        <!--  Notifications Plugin    -->
+        <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+        <script src="../assets/js/dashboard.min.js?v=1.2.0" type="text/javascript"></script>
+        <script src="../assets/demo/demo.js"></script>
+</body>
+
+</html>
+<script type="text/javascript">
+function formToJSON(table) { //begin function
+
+
+    //array to hold the key name
+    var keyName;
+
+    //array to store the keyNames for the objects
+    var keyNames = [];
+
+    //array to store the objects
+    var objectArray = [];
+
+
+    //get the number of cols
+    var numOfCols = table.rows[0].cells.length;
+
+    //get the number of rows
+    var numOfRows = table.rows.length;
+
+    //add the opening [ array bracket
+    objectArray.push("[");
+
+
+
+    //loop through and get the propertyNames or keyNames
+    for (var i = 0; i < numOfCols; i++) { //begin for loop  
+
+        //store the html of the table heading in the keyName variable
+        keyName = table.rows[0].cells[i].innerHTML;
+
+        //add the keyName to the keyNames array
+        keyNames.push(keyName);
+
+    } //end for loop
+
+
+
+    //loop through rows
+    for (var i = 1; i < numOfRows; i++) { //begin outer for loop    
+
+        //add the opening { object bracket
+        objectArray.push("{\n");
+
+        for (var j = 0; j < numOfCols; j++) { //begin inner for loop   
+
+            //extract the text from the input value in the table cell
+            var inputValue = table.rows[i].cells[j].children[0].value;
+
+            //store the object keyNames and its values
+            objectArray.push("\"" + keyNames[j] + "\":" + "\"" + inputValue + "\"");
+
+            //if j less than the number of columns - 1(<-- accounting for 0 based arrays)
+            if (j < (numOfCols - 1)) { //begin if then
+
+                //add the , seperator
+                objectArray.push(",\n");
+
+            } //end if then    
+
+        } //end inner for loop
+
+        //if i less than the number of rows - 1(<-- accounting for 0 based arrays)
+        if (i < (numOfRows - 1)) { //begin if then
+
+            //add the closing } object bracket followed by a , separator
+            objectArray.push("\n},\n");
+
+        } else {
+
+            //add the closing } object bracket
+            objectArray.push("\n}");
+
+        } //end if then else
+
+    } //end outer for loop
+
+    //add the closing ] array bracket
+    objectArray.push("]");
+
+    return objectArray.join("");
+
+
+} //end function
+
+
+$("#test-form").on("submit", function(e) {
+
+    //stop form form submitting
+    e.preventDefault();
+
+    //the table object 
+    var table = $("#json-table")[0];
+
+    //display the results
+    $("#results").val(formToJSON(table));
+
+});
+</script>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Form and Registration Form</title>
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  
+    <link rel="stylesheet" type="text/css" href="../assets/css/login-form.css">
+</head>
+
+<center><h1 >Stock Management System Login</h1></center>
+<script type="text/javascript">
+function display(form) {
+    if (form.username.value == "root") {
+        if (form.password.value == "root") {
+            location = "dashboard.html"
+        } else {
+            alert("Incorrect Password")
+        }
+    } else {
+        alert("Incorrect Username")
+    }
+}
+</script>
+<div class="login-page">
+    <div class="form">
+        <form class="login-form">
+            <input type="text" name="username" value="Username" /><br><br>
+            <input type="password" name="password" value="Password" /><br><br>
+            <input type="button" value="Login" onClick="display(this.form)" />
+        </form>
+    </div>
+</div>
+<footer> Project Made By : Hitendra Singh - 171210028<br>
+                            Irshad -171210029  <br>
+                            AKhil Narwal - 171210005<br>
+                            Ankit - 171210009<br>
+</footer>
+
+</body>
+
+</html>

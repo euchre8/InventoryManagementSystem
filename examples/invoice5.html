@@ -1,0 +1,555 @@
+<html>
+<script type="text/javascript">
+var obj = {
+    headings: ['Date', 'Invoice No', 'CustomerID', 'AmountDue','Feedback']
+};
+var obj1 = {
+  headings: ['ProductID', 'Item Name', 'Rate', 'Quantity', 'Price']  
+}
+</script>
+
+<head>
+    <meta charset="utf-8">
+    <title>Invoice 5 Revisit</title>
+    <link rel="stylesheet" href="../assets/css/invoice.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+
+    </script>
+    <script src="http://lightswitch05.github.io/table-to-json/javascripts/jquery.tabletojson.min.js"></script>
+    <script type="text/javascript">
+    function addRow(tableID) {
+
+        var table = document.getElementById(tableID);
+
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        var colCount = table.rows[0].cells.length;
+
+        for (var i = 0; i < colCount; i++) {
+
+            var newcell = row.insertCell(i);
+
+            newcell.innerHTML = table.rows[0].cells[i].innerHTML;
+            //alert(newcell.childNodes);
+            switch (newcell.childNodes[0].type) {
+                case "text":
+                    newcell.childNodes[0].value = "";
+                    break;
+                case "checkbox":
+                    newcell.childNodes[0].checked = false;
+                    break;
+                case "select-one":
+                    newcell.childNodes[0].selectedIndex = 0;
+                    break;
+            }
+        }
+    }
+
+    function deleteRow(tableID) {
+        try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+
+            for (var i = 0; i < rowCount; i++) {
+                var row = table.rows[i];
+                var chkbox = row.cells[0].childNodes[0];
+                if (null != chkbox && true == chkbox.checked) {
+                    if (rowCount <= 1) {
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+
+
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+    </script>
+</head>
+
+<body bgcolor="grey">
+    <header>
+        <h1>Invoice</h1>
+        <div id="left">
+            <textarea id="results"></textarea>
+        </div>
+        <address contenteditable>
+            <p>Milk Enterprises</p>
+            <p>Narela<br>
+                <p>Delhi<br>
+        </address>
+        <span><img alt="" src="../assets/img/logo.png"></span>
+    </header>
+    <p id="tym"></p>
+    Time : 
+    <script>
+        var d = new Date();
+    document.getElementById("tym").innerHTML = d;
+
+    obj[0] = d;
+    console.log(obj);
+    </script>
+    <article id="test-form">
+        <h1>Cashier : David
+                </h1>
+        <table class="meta">
+            <tr>
+                <th><span >Invoice #</span></th>
+                <td><input id="inv_no" value="101138"></td>
+            </tr>
+            <tr>
+                <th><span >Customer ID</span></th>
+                <td><input type="text" name="cid" id="cid" value="101"></td>
+                <script type="text/javascript">
+                console.log(document.getElementById('cid').value);
+                </script>
+            </tr>
+            <tr>
+                <th><span contenteditable>Amount Due</span></th>
+                <td><span id="prefix">₹</span><span contenteditable id="due">600</td>
+            </tr>
+        </table>
+        <table class="inventory" id="example-table">
+            <thead>
+                <tr>
+                    <th><span id="pid">Product ID</span></th>
+                <th><span id="item-name">Item Name</span></th>
+                <th><span id="rate">Rate</span></th>
+                <th><span id="quantity">Quantity</span></th>
+                <th><span id="price">Price</span></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left">
+                        <center><a class="cut"></a><span id='prod' contenteditable>Milk</span>
+                    </td>
+                    </center>
+                    <td align="left"><span id="prod-name" contenteditable>Full Cream</span></td>
+                    <td align="left"><span id='rate' data-prefix>₹</span><span id="rate" contenteditable>150.00</span></td>
+                    <td align="left"><span id="quantity" contenteditable>4</span></td>
+                    <td align="left"><span id="price" data-prefix>₹</span><span id="price">600.00</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="add">+</a>
+        <table class="balance" id="example-table">
+            <tr>
+                <th align="left"><span >Total</span></th>
+                <td align="left"><span data-prefix>₹</span><span>600.00</span></td>
+            </tr>
+            <tr>
+                <th><span >Amount Paid</span></th>
+                <td align="left"><span data-prefix >₹</span><span contenteditable>0.00</span></td>
+            </tr>
+            <tr>
+                <th><span >Balance Due</span></th>
+                <td align="left"><span data-prefix>₹</span><span>600.00</span></td>
+            </tr>
+        </table>
+    </article>
+    <center><button class="button" id="run" onClick="custname()">Proceed</button></center>
+    <br><button class="button" onClick="gotoDash()">Back To Dashboard</button>
+    <br><br><br>
+    <h1>Feedback</h1>
+    <br>
+    <textarea id="feedback"></textarea>
+    <br>
+    <br>
+    <aside>
+        <h1><span >Thank You for coming. Visit Again</span></h1>
+    </aside>
+</body>
+<script type="text/javascript">
+    function postTheData(){
+
+    }
+    $('#run').click( function() {
+        let invoiceHeader = custname()
+        let products = $('#example-table').tableToJSON()
+        let sum =  0
+        products.forEach((product) =>{
+            sum += product.Price
+        })  
+        invoiceHeader.totalAmount = sum 
+        fetch('examples/add/invoice',{
+            method : "POST",
+
+        })
+});
+function custname() {
+    obj[1] = document.getElementById('inv_no').value;
+    //console.log(obj);
+    obj[2] = document.getElementById('cid').value;
+    obj[3] = document.getElementById('due').value;
+    obj[3] = document.getElementById('feedback').value;
+
+    var x = document.getElementById("example-table").rows.length;
+    var Row = document.getElementById("example-table");
+    var Cells = Row.getElementsByTagName("td");
+    console.log(Cells[0].innerText);
+    obj1 = {};
+    for (var i = 0; i <=x; i++) {
+        obj1[i] = Cells[i].innerText;
+    }
+    console.log("Object");
+    console.log(obj);
+    return obj;
+    
+}
+
+function gotoDash() {
+    location = "dashboard.html"
+}
+</script>
+
+</html>
+<style>
+    .button {
+    background-color: #008CBA; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+</style>
+<script type="text/javascript">
+(function(document) {
+    var
+        head = document.head = document.getElementsByTagName('head')[0] || document.documentElement,
+        elements = 'article aside audio bdi canvas data datalist details figcaption figure footer header hgroup mark meter nav output picture progress section summary time video x'.split(' '),
+        elementsLength = elements.length,
+        elementsIndex = 0,
+        element;
+
+    while (elementsIndex < elementsLength) {
+        element = document.createElement(elements[++elementsIndex]);
+    }
+
+    element.innerHTML = 'x<style>' +
+        'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block}' +
+        'audio[controls],canvas,video{display:inline-block}' +
+        '[hidden],audio{display:none}' +
+        'mark{background:#FF0;color:#000}' +
+        '</style>';
+
+    return head.insertBefore(element.lastChild, head.firstChild);
+})(document);
+
+
+(function(window, ElementPrototype, ArrayPrototype, polyfill) {
+    function NodeList() {
+        [polyfill]
+    }
+    NodeList.prototype.length = ArrayPrototype.length;
+
+    ElementPrototype.matchesSelector = ElementPrototype.matchesSelector ||
+        ElementPrototype.mozMatchesSelector ||
+        ElementPrototype.msMatchesSelector ||
+        ElementPrototype.oMatchesSelector ||
+        ElementPrototype.webkitMatchesSelector ||
+        function matchesSelector(selector) {
+            return ArrayPrototype.indexOf.call(this.parentNode.querySelectorAll(selector), this) > -1;
+        };
+
+    ElementPrototype.ancestorQuerySelectorAll = ElementPrototype.ancestorQuerySelectorAll ||
+        ElementPrototype.mozAncestorQuerySelectorAll ||
+        ElementPrototype.msAncestorQuerySelectorAll ||
+        ElementPrototype.oAncestorQuerySelectorAll ||
+        ElementPrototype.webkitAncestorQuerySelectorAll ||
+        function ancestorQuerySelectorAll(selector) {
+            for (var cite = this, newNodeList = new NodeList; cite = cite.parentElement;) {
+                if (cite.matchesSelector(selector)) ArrayPrototype.push.call(newNodeList, cite);
+            }
+
+            return newNodeList;
+        };
+
+    ElementPrototype.ancestorQuerySelector = ElementPrototype.ancestorQuerySelector ||
+        ElementPrototype.mozAncestorQuerySelector ||
+        ElementPrototype.msAncestorQuerySelector ||
+        ElementPrototype.oAncestorQuerySelector ||
+        ElementPrototype.webkitAncestorQuerySelector ||
+        function ancestorQuerySelector(selector) {
+            return this.ancestorQuerySelectorAll(selector)[0] || null;
+        };
+})(this, Element.prototype, Array.prototype);
+
+
+function generateTableRow() {
+    var emptyColumn = document.createElement('tr');
+
+    emptyColumn.innerHTML = '<td><a class="cut">-</a><span contenteditable></span></td>' +
+        '<td><span contenteditable></span></td>' +
+        '<td><span data-prefix>$</span><span contenteditable>0.00</span></td>' +
+        '<td><span contenteditable>0</span></td>' +
+        '<td><span data-prefix>$</span><span>0.00</span></td>';
+
+    return emptyColumn;
+}
+
+function parseFloatHTML(element) {
+    return parseFloat(element.innerHTML.replace(/[^\d\.\-]+/g, '')) || 0;
+}
+
+function parsePrice(number) {
+    return number.toFixed(2).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,');
+}
+
+
+function updateNumber(e) {
+    var
+        activeElement = document.activeElement,
+        value = parseFloat(activeElement.innerHTML),
+        wasPrice = activeElement.innerHTML == parsePrice(parseFloatHTML(activeElement));
+
+    if (!isNaN(value) && (e.keyCode == 38 || e.keyCode == 40 || e.wheelDeltaY)) {
+        e.preventDefault();
+
+        value += e.keyCode == 38 ? 1 : e.keyCode == 40 ? -1 : Math.round(e.wheelDelta * 0.025);
+        value = Math.max(value, 0);
+
+        activeElement.innerHTML = wasPrice ? parsePrice(value) : value;
+    }
+
+    updateInvoice();
+}
+
+
+function updateInvoice() {
+    var total = 0;
+    var cells, price, total, a, i;
+
+
+    for (var a = document.querySelectorAll('table.inventory tbody tr'), i = 0; a[i]; ++i) {
+        // get inventory row cells
+        cells = a[i].querySelectorAll('span:last-child');
+
+        // set price as cell[2] * cell[3]
+        price = parseFloatHTML(cells[2]) * parseFloatHTML(cells[3]);
+
+        // add price to total
+        total += price;
+
+        // set row total
+        cells[4].innerHTML = price;
+    }
+
+    // update balance cells
+    // ====================
+
+    // get balance cells
+    cells = document.querySelectorAll('table.balance td:last-child span:last-child');
+
+    // set total
+    cells[0].innerHTML = total;
+
+    // set balance and meta balance
+    cells[2].innerHTML = document.querySelector('table.meta tr:last-child td:last-child span:last-child').innerHTML = parsePrice(total - parseFloatHTML(cells[1]));
+
+    // update prefix formatting
+    // ========================
+
+    var prefix = document.querySelector('#prefix').innerHTML;
+    for (a = document.querySelectorAll('[data-prefix]'), i = 0; a[i]; ++i) a[i].innerHTML = prefix;
+
+    // update price formatting
+    // =======================
+
+    for (a = document.querySelectorAll('span[data-prefix] + span'), i = 0; a[i]; ++i)
+        if (document.activeElement != a[i]) a[i].innerHTML = parsePrice(parseFloatHTML(a[i]));
+}
+
+
+function onContentLoad() {
+    updateInvoice();
+
+    var
+        input = document.querySelector('input'),
+        image = document.querySelector('img');
+
+    function onClick(e) {
+        var element = e.target.querySelector('[contenteditable]'),
+            row;
+
+        element && e.target != document.documentElement && e.target != document.body && element.focus();
+
+        if (e.target.matchesSelector('.add')) {
+            document.querySelector('table.inventory tbody').appendChild(generateTableRow());
+        } else if (e.target.className == 'cut') {
+            row = e.target.ancestorQuerySelector('tr');
+
+            row.parentNode.removeChild(row);
+        }
+
+        updateInvoice();
+    }
+
+    function onEnterCancel(e) {
+        e.preventDefault();
+
+        image.classList.add('hover');
+    }
+
+    function onLeaveCancel(e) {
+        e.preventDefault();
+
+        image.classList.remove('hover');
+    }
+
+    function onFileInput(e) {
+        image.classList.remove('hover');
+
+        var
+            reader = new FileReader(),
+            files = e.dataTransfer ? e.dataTransfer.files : e.target.files,
+            i = 0;
+
+        reader.onload = onFileLoad;
+
+        while (files[i]) reader.readAsDataURL(files[i++]);
+    }
+
+    function onFileLoad(e) {
+        var data = e.target.result;
+
+        image.src = data;
+    }
+
+    if (window.addEventListener) {
+        document.addEventListener('click', onClick);
+
+        document.addEventListener('mousewheel', updateNumber);
+        document.addEventListener('keydown', updateNumber);
+
+        document.addEventListener('keydown', updateInvoice);
+        document.addEventListener('keyup', updateInvoice);
+
+        input.addEventListener('focus', onEnterCancel);
+        input.addEventListener('mouseover', onEnterCancel);
+        input.addEventListener('dragover', onEnterCancel);
+        input.addEventListener('dragenter', onEnterCancel);
+
+        input.addEventListener('blur', onLeaveCancel);
+        input.addEventListener('dragleave', onLeaveCancel);
+        input.addEventListener('mouseout', onLeaveCancel);
+
+        input.addEventListener('drop', onFileInput);
+        input.addEventListener('change', onFileInput);
+    }
+}
+
+window.addEventListener && document.addEventListener('DOMContentLoaded', onContentLoad);
+</script>
+<script>
+function formToJSON(table) { //begin function
+
+
+    //array to hold the key name
+    var keyName;
+
+    //array to store the keyNames for the objects
+    var keyNames = [];
+
+    //array to store the objects
+    var objectArray = [];
+
+
+    //get the number of cols
+    var numOfCols = table.rows[0].cells.length;
+
+    //get the number of rows
+    var numOfRows = table.rows.length;
+
+    //add the opening [ array bracket
+    objectArray.push("[");
+
+
+
+    //loop through and get the propertyNames or keyNames
+    for (var i = 0; i < numOfCols; i++) { //begin for loop  
+
+        //store the html of the table heading in the keyName variable
+        keyName = table.rows[0].cells[i].innerHTML;
+
+        //add the keyName to the keyNames array
+        keyNames.push(keyName);
+
+    } //end for loop
+
+
+
+    //loop through rows
+    for (var i = 1; i < numOfRows; i++) { //begin outer for loop    
+
+        //add the opening { object bracket
+        objectArray.push("{\n");
+
+        for (var j = 0; j < numOfCols; j++) { //begin inner for loop   
+
+            //extract the text from the input value in the table cell
+            var inputValue = table.rows[i].cells[j].children[0].value;
+
+            //store the object keyNames and its values
+            objectArray.push("\"" + keyNames[j] + "\":" + "\"" + inputValue + "\"");
+
+            //if j less than the number of columns - 1(<-- accounting for 0 based arrays)
+            if (j < (numOfCols - 1)) { //begin if then
+
+                //add the , seperator
+                objectArray.push(",\n");
+
+            } //end if then    
+
+        } //end inner for loop
+
+        //if i less than the number of rows - 1(<-- accounting for 0 based arrays)
+        if (i < (numOfRows - 1)) { //begin if then
+
+            //add the closing } object bracket followed by a , separator
+            objectArray.push("\n},\n");
+
+        } else {
+
+            //add the closing } object bracket
+            objectArray.push("\n}");
+
+        } //end if then else
+
+    } //end outer for loop
+
+    //add the closing ] array bracket
+    objectArray.push("]");
+
+    return objectArray.join("");
+
+
+} //end function
+
+
+$("#test-form").on("submit", function(e) {
+
+    //stop form form submitting
+    e.preventDefault();
+
+    //the table object 
+    var table = $("#json-table")[0];
+
+    //display the results
+    $("#results").val(formToJSON(table));
+
+});
+</script>
